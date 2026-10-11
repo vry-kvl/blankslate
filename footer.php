@@ -2,6 +2,8 @@
 <footer
     id="footer"
     class="pt-24 pb-12 px-6 z-10 container mx-auto max-w-6xl border-t border-black/[0.08]"
+    role="contentinfo"
+    aria-label="<?php esc_attr_e( 'Site Footer', 'blankslate' ); ?>"
 >
 
     <div class="flex flex-col lg:flex-row justify-between items-start gap-12 mb-16">
@@ -13,8 +15,8 @@
             </h4>
 
             <p class="text-xs text-[#5F6368] mt-2 max-w-sm">
-                Modern WordPress engineering for growing businesses.
-                High velocity with modern block themes and Elementor.
+                Modern Shopify and WordPress engineering for growing businesses.
+                High velocity with bespoke themes, WooCommerce, and sub-second performance.
             </p>
         </div>
 
@@ -65,7 +67,7 @@
                 <ul class="space-y-2 text-[#5F6368]">
                     <li>
                         <a href="#pricing" class="hover:text-black transition-colors">
-                            Pricing & Plans
+                            Pricing &amp; Plans
                         </a>
                     </li>
 
@@ -99,7 +101,7 @@
                 <ul class="space-y-2 text-[#5F6368]">
                     <li>
                         <a href="#architecture" class="hover:text-black transition-colors">
-                            Block Themes & Elementor
+                            Shopify &amp; Block Themes
                         </a>
                     </li>
 
@@ -154,35 +156,35 @@
         </div>
 
 
-        <!-- Legal Links -->
+        <!-- Functional On-Page Navigation Links -->
         <div class="flex items-center gap-6">
 
             <a
-                href="<?php echo esc_url( home_url('/about/') ); ?>"
+                href="#statement"
                 class="hover:text-black transition-colors"
             >
                 About Studio
             </a>
 
             <a
-                href="<?php echo esc_url( home_url('/privacy-policy/') ); ?>"
+                href="#architecture"
                 class="hover:text-black transition-colors"
             >
-                Privacy
+                Architecture Standards
             </a>
 
             <a
-                href="<?php echo esc_url( home_url('/terms/') ); ?>"
+                href="#hardening"
                 class="hover:text-black transition-colors"
             >
-                Terms
+                Security &amp; Hardening
             </a>
 
             <a
-                href="<?php echo esc_url( home_url('/code-standards/') ); ?>"
+                href="#faq"
                 class="hover:text-black transition-colors"
             >
-                Code Standards
+                FAQ &amp; Terms
             </a>
 
         </div>

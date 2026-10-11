@@ -160,7 +160,7 @@ function initKeyboardNav() {
 }
 
 /**
- * FAQ Accordion with Keyboard Support
+ * FAQ Accordion with Keyboard Support & Accessible ARIA States
  */
 function initFaqAccordion() {
   const faqItems = document.querySelectorAll('.ag-faq-item, .faq-item');
@@ -179,6 +179,8 @@ function initFaqAccordion() {
       faqItems.forEach(otherItem => {
         if (otherItem !== item) {
           otherItem.classList.remove('active');
+          const otherBtn = otherItem.querySelector('.ag-faq-question, .faq-question');
+          if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
           const otherAnswer = otherItem.querySelector('.ag-faq-answer, .faq-answer');
           if (otherAnswer) otherAnswer.style.maxHeight = null;
         }
@@ -187,9 +189,11 @@ function initFaqAccordion() {
       // Toggle current item
       if (!isExpanded) {
         item.classList.add('active');
+        questionBtn.setAttribute('aria-expanded', 'true');
         answerElem.style.maxHeight = answerElem.scrollHeight + 'px';
       } else {
         item.classList.remove('active');
+        questionBtn.setAttribute('aria-expanded', 'false');
         answerElem.style.maxHeight = null;
       }
     });
@@ -198,6 +202,7 @@ function initFaqAccordion() {
 
 /**
  * Pre-select Service in Contact Form Dropdown
+ * Handles exact value match as well as resilient keyword fallback matching
  */
 function initServiceSelectTriggers() {
   const serviceSelect = document.getElementById('serviceSelect');
@@ -208,10 +213,34 @@ function initServiceSelectTriggers() {
     btn.addEventListener('click', () => {
       const targetService = btn.getAttribute('data-service-value');
       if (targetService) {
+        let matched = false;
+        // 1. Try exact match
         for (let i = 0; i < serviceSelect.options.length; i++) {
           if (serviceSelect.options[i].value === targetService) {
             serviceSelect.selectedIndex = i;
+            matched = true;
             break;
+          }
+        }
+
+        // 2. Fallback to keyword match if option text differs
+        if (!matched) {
+          const lowerTarget = targetService.toLowerCase();
+          for (let i = 0; i < serviceSelect.options.length; i++) {
+            const optVal = serviceSelect.options[i].value.toLowerCase();
+            if (
+              (lowerTarget.includes('landing') && optVal.includes('landing')) ||
+              (lowerTarget.includes('woo') && optVal.includes('woo')) ||
+              (lowerTarget.includes('store') && optVal.includes('store')) ||
+              (lowerTarget.includes('figma') && optVal.includes('figma')) ||
+              (lowerTarget.includes('redesign') && optVal.includes('redesign')) ||
+              (lowerTarget.includes('fix') && optVal.includes('fix')) ||
+              (lowerTarget.includes('custom') && optVal.includes('custom'))
+            ) {
+              serviceSelect.selectedIndex = i;
+              matched = true;
+              break;
+            }
           }
         }
 

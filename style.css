@@ -484,3 +484,32 @@ select.ag-input {
     border-width: 3px 1px 3px 1px;
 }
 /* ------------ Contact form 7 css ------------ */
+
+/* ==========================================================================
+   Accessibility: Focus States & Reduced Motion
+   ========================================================================== */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #111111;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .hero-ambient-glow {
+    animation: none !important;
+  }
+  .shimmer-badge::after {
+    animation: none !important;
+  }
+}

@@ -38,14 +38,21 @@ add_user_meta( $user_id, 'blankslate_notice_dismissed_2026', 'true', true );
 }
 add_action( 'wp_enqueue_scripts', 'blankslate_enqueue' );
 function blankslate_enqueue() {
-wp_enqueue_style(
-    'blankslate-style',
-    get_stylesheet_uri(),
-    array(),
-    time()
-);
-wp_enqueue_script( 'jquery' );
-wp_enqueue_script( 'custom-script', get_template_directory_uri() . '/assets/js/script.js', array( 'jquery' ), time(), true);
+    $theme_version = wp_get_theme()->get( 'Version' ) ? wp_get_theme()->get( 'Version' ) : '1.1.0';
+    wp_enqueue_style(
+        'blankslate-style',
+        get_stylesheet_uri(),
+        array(),
+        $theme_version
+    );
+    wp_enqueue_script( 'jquery' );
+    wp_enqueue_script(
+        'custom-script',
+        get_template_directory_uri() . '/assets/js/script.js',
+        array( 'jquery' ),
+        $theme_version,
+        true
+    );
 }
 add_action( 'wp_footer', 'blankslate_footer' );
 function blankslate_footer() {
@@ -186,6 +193,10 @@ return $count;
 }
 }
 
+/**
+ * Single-Page Redirect Handler
+ * Safely redirects non-homepage URLs to canonical homepage without breaking robots.txt, sitemaps, REST API, feeds or admin
+ */
 function kineva_redirect_users_to_homepage() {
 
     // Don't redirect WordPress admin
@@ -198,10 +209,25 @@ function kineva_redirect_users_to_homepage() {
         return;
     }
 
-    // Don't redirect URLs containing "prev-"
+    // Don't redirect search engine robots, feeds, favicons, or sitemaps
+    if ( is_robots() || is_feed() || is_favicon() || get_query_var( 'sitemap' ) || get_query_var( 'sitemap-stylesheet' ) ) {
+        return;
+    }
+
+    // Don't redirect REST API requests
+    if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+        return;
+    }
+
     $request_uri = $_SERVER['REQUEST_URI'] ?? '';
 
+    // Don't redirect preview URLs
     if ( strpos( $request_uri, 'prev-' ) !== false ) {
+        return;
+    }
+
+    // Don't redirect robots.txt or XML sitemaps
+    if ( strpos( $request_uri, 'robots.txt' ) !== false || preg_match( '/sitemap(_index)?\.xml(\.gz)?/i', $request_uri ) ) {
         return;
     }
 
@@ -210,9 +236,186 @@ function kineva_redirect_users_to_homepage() {
         return;
     }
 
-    // Redirect everything else
-    wp_safe_redirect( home_url( '/' ), 302 );
+    // Redirect everything else permanently (301) to canonical homepage
+    wp_safe_redirect( home_url( '/' ), 301 );
     exit;
 }
-
 add_action( 'template_redirect', 'kineva_redirect_users_to_homepage' );
+
+/**
+ * Custom robots.txt Directives
+ * Ensures search engines properly crawl assets while declaring the official sitemap
+ */
+function kineva_custom_robots_txt( $output, $public ) {
+    if ( '0' === (string) $public ) {
+        return "User-agent: *\nDisallow: /\n";
+    }
+
+    $sitemap_url = home_url( '/sitemap_index.xml' );
+    $custom  = "User-agent: *\n";
+    $custom .= "Disallow: /wp-admin/\n";
+    $custom .= "Allow: /wp-admin/admin-ajax.php\n";
+    $custom .= "Allow: /wp-content/uploads/\n";
+    $custom .= "Allow: /wp-content/themes/\n\n";
+    $custom .= "Sitemap: " . esc_url( $sitemap_url ) . "\n";
+
+    return $custom;
+}
+add_filter( 'robots_txt', 'kineva_custom_robots_txt', 20, 2 );
+
+/**
+ * SEO Title Handling
+ * Sets optimal commercial title for WordPress native document title and Yoast SEO
+ */
+function kineva_seo_title( $title ) {
+    if ( is_front_page() ) {
+        return 'Shopify & WordPress Development Agency | Kineva Studios';
+    }
+    return $title;
+}
+add_filter( 'pre_get_document_title', 'kineva_seo_title', 20 );
+add_filter( 'wpseo_title', 'kineva_seo_title', 20 );
+
+/**
+ * SEO Meta Description Handling
+ * Filters Yoast SEO meta description for homepage
+ */
+function kineva_seo_description( $desc ) {
+    if ( is_front_page() ) {
+        return 'Build, customize and optimize Shopify and WordPress websites with Kineva Studios. Explore custom development, eCommerce solutions, bug fixes and website support.';
+    }
+    return $desc;
+}
+add_filter( 'wpseo_metadesc', 'kineva_seo_description', 20 );
+
+/**
+ * Yoast Social & Open Graph Filters
+ */
+add_filter( 'wpseo_opengraph_title', 'kineva_seo_title', 20 );
+add_filter( 'wpseo_opengraph_desc', 'kineva_seo_description', 20 );
+add_filter( 'wpseo_twitter_title', 'kineva_seo_title', 20 );
+add_filter( 'wpseo_twitter_description', 'kineva_seo_description', 20 );
+
+/**
+ * Fallback SEO Metadata (runs if Yoast/RankMath are inactive)
+ */
+function kineva_fallback_meta_tags() {
+    if ( ! is_front_page() ) {
+        return;
+    }
+
+    $is_seo_plugin_active = defined( 'WPSEO_VERSION' ) || class_exists( 'RankMath' ) || defined( 'AIOSEO_VERSION' );
+    if ( $is_seo_plugin_active ) {
+        return;
+    }
+
+    $desc          = 'Build, customize and optimize Shopify and WordPress websites with Kineva Studios. Explore custom development, eCommerce solutions, bug fixes and website support.';
+    $canonical_url = home_url( '/' );
+    $logo_url      = get_template_directory_uri() . '/assets/images/kineva-studios-logo.png';
+    $site_name     = get_bloginfo( 'name' );
+
+    echo '<meta name="description" content="' . esc_attr( $desc ) . '">' . "\n";
+    echo '<link rel="canonical" href="' . esc_url( $canonical_url ) . '" />' . "\n";
+    echo '<meta property="og:locale" content="' . esc_attr( get_locale() ) . '" />' . "\n";
+    echo '<meta property="og:type" content="website" />' . "\n";
+    echo '<meta property="og:title" content="' . esc_attr( 'Shopify & WordPress Development Agency | Kineva Studios' ) . '" />' . "\n";
+    echo '<meta property="og:description" content="' . esc_attr( $desc ) . '" />' . "\n";
+    echo '<meta property="og:url" content="' . esc_url( $canonical_url ) . '" />' . "\n";
+    echo '<meta property="og:site_name" content="' . esc_attr( $site_name ) . '" />' . "\n";
+    echo '<meta property="og:image" content="' . esc_url( $logo_url ) . '" />' . "\n";
+    echo '<meta name="twitter:card" content="summary_large_image" />' . "\n";
+    echo '<meta name="twitter:title" content="' . esc_attr( 'Shopify & WordPress Development Agency | Kineva Studios' ) . '" />' . "\n";
+    echo '<meta name="twitter:description" content="' . esc_attr( $desc ) . '" />' . "\n";
+    echo '<meta name="twitter:image" content="' . esc_url( $logo_url ) . '" />' . "\n";
+}
+add_action( 'wp_head', 'kineva_fallback_meta_tags', 1 );
+
+/**
+ * Structured Data (Schema.org JSON-LD)
+ * Adds verified Service and Organization entities describing actual capabilities
+ */
+function kineva_output_structured_data() {
+    if ( ! is_front_page() ) {
+        return;
+    }
+
+    $home_url = esc_url( home_url( '/' ) );
+    $logo_url = esc_url( get_template_directory_uri() . '/assets/images/kineva-studios-logo.png' );
+
+    $schema_graph = array(
+        '@context' => 'https://schema.org',
+        '@graph'   => array(
+            array(
+                '@type'        => 'Organization',
+                '@id'          => $home_url . '#organization',
+                'name'         => 'Kineva Studios',
+                'url'          => $home_url,
+                'logo'         => array(
+                    '@type'      => 'ImageObject',
+                    '@id'        => $home_url . '#logo',
+                    'url'        => $logo_url,
+                    'contentUrl' => $logo_url,
+                    'caption'    => 'Kineva Studios',
+                ),
+                'description'  => 'Shopify and WordPress development agency specializing in custom themes, eCommerce solutions, and Core Web Vitals performance optimization.',
+            ),
+            array(
+                '@type'       => 'Service',
+                '@id'         => $home_url . '#service-shopify',
+                'name'        => 'Custom Shopify Development & Theme Customization',
+                'serviceType' => 'Shopify Development Services',
+                'provider'    => array(
+                    '@type' => 'Organization',
+                    '@id'   => $home_url . '#organization',
+                    'name'  => 'Kineva Studios',
+                ),
+                'description' => 'Bespoke Shopify theme development, Liquid customization, conversion-focused landing pages, and storefront troubleshooting.',
+                'areaServed'  => 'Global',
+            ),
+            array(
+                '@type'       => 'Service',
+                '@id'         => $home_url . '#service-wordpress',
+                'name'        => 'Custom WordPress Development & Block Themes',
+                'serviceType' => 'WordPress Development Services',
+                'provider'    => array(
+                    '@type' => 'Organization',
+                    '@id'   => $home_url . '#organization',
+                    'name'  => 'Kineva Studios',
+                ),
+                'description' => 'Lightweight Gutenberg block theme engineering, Elementor visual architecture, custom WordPress websites, and security hardening.',
+                'areaServed'  => 'Global',
+            ),
+            array(
+                '@type'       => 'Service',
+                '@id'         => $home_url . '#service-ecommerce',
+                'name'        => 'WooCommerce & Shopify Store Development',
+                'serviceType' => 'eCommerce Development Services',
+                'provider'    => array(
+                    '@type' => 'Organization',
+                    '@id'   => $home_url . '#organization',
+                    'name'  => 'Kineva Studios',
+                ),
+                'description' => 'Turnkey eCommerce architecture, frictionless checkout workflows, payment gateway integrations, and product catalog configuration.',
+                'areaServed'  => 'Global',
+            ),
+            array(
+                '@type'       => 'Service',
+                '@id'         => $home_url . '#service-optimization',
+                'name'        => 'Shopify & WordPress Performance Optimization and Bug Fixing',
+                'serviceType' => 'Website Optimization & Technical Support',
+                'provider'    => array(
+                    '@type' => 'Organization',
+                    '@id'   => $home_url . '#organization',
+                    'name'  => 'Kineva Studios',
+                ),
+                'description' => 'Core Web Vitals speed tuning, database query reduction, asset deduplication, rapid bug troubleshooting, and ongoing technical maintenance.',
+                'areaServed'  => 'Global',
+            ),
+        ),
+    );
+
+    echo "\n" . '<script type="application/ld+json">' . "\n";
+    echo wp_json_encode( $schema_graph, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
+    echo "\n" . '</script>' . "\n";
+}
+add_action( 'wp_head', 'kineva_output_structured_data', 30 );

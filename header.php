@@ -8,20 +8,11 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0">
 
-  <title>
-    <?php
-    if (is_front_page()) {
-      echo 'Kineva Studios — We build websites that work.';
-    } else {
-      wp_title('|', true, 'right');
-      bloginfo('name');
-    }
-    ?>
-  </title>
-
-  <meta
-    name="description"
-    content="Modern WordPress development for growing businesses. High velocity with modern Gutenberg block themes and Elementor for rapid turnaround and top performance.">
+  <?php if ( ! has_site_icon() ) : ?>
+  <!-- Brand Favicon Fallback -->
+  <link rel="icon" type="image/svg+xml" href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/kineva-studios-app-icon.svg' ); ?>">
+  <link rel="alternate icon" type="image/png" href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/kineva-studios-app-icon.png' ); ?>">
+  <?php endif; ?>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com?plugins=container-queries"></script>
@@ -78,18 +69,6 @@
     };
   </script>
 
-  <!-- Organization Schema for GTM & Google Brand Validation -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Kineva Studios",
-    "url": "<?php echo esc_url( home_url('/') ); ?>",
-    "logo": "<?php echo esc_url( get_template_directory_uri() . '/assets/images/kineva-studios-logo.png' ); ?>",
-    "image": "<?php echo esc_url( get_template_directory_uri() . '/assets/images/kineva-studios-logo.png' ); ?>"
-  }
-  </script>
-
   <?php wp_head(); ?>
 
 </head>
@@ -103,16 +82,18 @@
 
   <!-- STICKY NAVIGATION (Antigravity Style) -->
   <nav id="siteHeader"
-    class="fixed top-0 left-0 w-full z-50 px-6 lg:px-14 py-4 flex justify-between items-center bg-[#F8F9FA]/85 backdrop-blur-md transition-all duration-200 border-b border-black/[0.04]">
+    class="fixed top-0 left-0 w-full z-50 px-6 lg:px-14 py-4 flex justify-between items-center bg-[#F8F9FA]/85 backdrop-blur-md transition-all duration-200 border-b border-black/[0.04]"
+    aria-label="<?php esc_attr_e( 'Main Navigation', 'blankslate' ); ?>">
     <!-- Brand Logo (Validated for GTM & Analytics) -->
     <a href="#hero" id="headerLogoLink" class="flex items-center group" aria-label="Kineva Studios Home" data-gtm="header-logo-link">
       <img
         src="<?php echo esc_url( get_template_directory_uri() ); ?>/assets/images/kineva-studios-logo.svg"
-        alt="Kineva Studios"
+        alt="<?php esc_attr_e( 'Kineva Studios — Shopify &amp; WordPress Development Agency', 'blankslate' ); ?>"
         id="siteLogo"
         class="site-logo h-6 sm:h-7 w-auto transition-transform duration-200 group-hover:scale-[1.02]"
         width="149"
         height="26"
+        fetchpriority="high"
         data-gtm="site-logo"
         itemprop="logo"
       />
@@ -142,7 +123,9 @@
       <!-- Mobile Menu Toggle Button -->
       <button id="mobileToggle"
         class="md:hidden w-9 h-9 rounded-full bg-[#ECECEE] flex flex-col items-center justify-center gap-1 text-[#111111]"
-        aria-label="Toggle navigation">
+        aria-label="<?php esc_attr_e( 'Toggle navigation menu', 'blankslate' ); ?>"
+        aria-expanded="false"
+        aria-controls="navMenu">
         <span class="w-4 h-0.5 bg-[#111111] rounded-full"></span>
         <span class="w-4 h-0.5 bg-[#111111] rounded-full"></span>
       </button>
@@ -152,7 +135,9 @@
 
   <!-- Mobile Drawer Menu -->
   <div id="navMenu"
-    class="fixed inset-x-0 top-[64px] bg-[#F8F9FA] border-b border-black/[0.08] p-6 z-40 hidden flex-col gap-4 shadow-lg md:hidden">
+    class="fixed inset-x-0 top-[64px] bg-[#F8F9FA] border-b border-black/[0.08] p-6 z-40 hidden flex-col gap-4 shadow-lg md:hidden"
+    role="navigation"
+    aria-label="<?php esc_attr_e( 'Mobile Navigation', 'blankslate' ); ?>">
     <a class="nav-link text-base font-medium text-[#111111] py-2 border-b border-black/[0.04]" href="#hero">Home</a>
     <a class="nav-link text-base font-medium text-[#111111] py-2 border-b border-black/[0.04]"
       href="#architecture">Architecture</a>
