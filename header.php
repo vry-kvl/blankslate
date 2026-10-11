@@ -78,6 +78,18 @@
     };
   </script>
 
+  <!-- Organization Schema for GTM & Google Brand Validation -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Kineva Studios",
+    "url": "<?php echo esc_url( home_url('/') ); ?>",
+    "logo": "<?php echo esc_url( get_template_directory_uri() . '/assets/images/kineva-studios-logo.png' ); ?>",
+    "image": "<?php echo esc_url( get_template_directory_uri() . '/assets/images/kineva-studios-logo.png' ); ?>"
+  }
+  </script>
+
   <?php wp_head(); ?>
 
 </head>
@@ -92,13 +104,18 @@
   <!-- STICKY NAVIGATION (Antigravity Style) -->
   <nav id="siteHeader"
     class="fixed top-0 left-0 w-full z-50 px-6 lg:px-14 py-4 flex justify-between items-center bg-[#F8F9FA]/85 backdrop-blur-md transition-all duration-200 border-b border-black/[0.04]">
-    <!-- Brand Logo -->
-    <a href="#hero" class="flex items-center gap-2.5 group" aria-label="Kineva Studios Home">
-      <svg class="w-5 h-5 text-[#111111]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2.2"
-          stroke-linecap="round" stroke-linejoin="round" />
-      </svg>
-      <span class="text-[17px] font-medium tracking-tight text-[#111111]">Kineva Studios</span>
+    <!-- Brand Logo (Validated for GTM & Analytics) -->
+    <a href="#hero" id="headerLogoLink" class="flex items-center group" aria-label="Kineva Studios Home" data-gtm="header-logo-link">
+      <img
+        src="<?php echo esc_url( get_template_directory_uri() ); ?>/assets/images/kineva-studios-logo.svg"
+        alt="Kineva Studios"
+        id="siteLogo"
+        class="site-logo h-6 sm:h-7 w-auto transition-transform duration-200 group-hover:scale-[1.02]"
+        width="149"
+        height="26"
+        data-gtm="site-logo"
+        itemprop="logo"
+      />
     </a>
 
     <!-- Center Nav Links -->
