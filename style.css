@@ -1,0 +1,486 @@
+/*
+Theme Name: BlankSlate
+Theme URI: https://opencollective.com/blankslate
+Author: Web Guy
+Author URI: https://opencollective.com/blankslate#section-contributors
+Description: Donate: https://opencollective.com/blankslate. Learn: https://blankslate.me/. BlankSlate is the definitive WordPress boilerplate starter theme. I've carefully constructed the most clean and minimalist theme possible for designers and developers to use as a base to build websites for clients or to build completely custom themes from scratch. Clean, simple, unstyled, semi-minified, unformatted, and valid code, SEO-friendly, jQuery-enabled, no programmer comments, standardized and as white label as possible, and most importantly, the CSS is reset for cross-browser-compatability, with no intrusive visual CSS styles added whatsoever. A perfect skeleton theme. For support and suggestions, go to: https://github.com/webguyio/blankslate/issues. Thank you.
+Tags: accessibility-ready, one-column, two-columns, custom-menu, featured-images, microformats, sticky-post, threaded-comments, translation-ready
+Version: 2026
+Requires at least: 5.2
+Tested up to: 6.8
+Requires PHP: 7.4
+License: GNU General Public License v3 or Later
+License URI: https://www.gnu.org/licenses/gpl.html
+Text Domain: blankslate
+
+BlankSlate WordPress Theme 2011-2026
+BlankSlate is distributed under the terms of the GNU GPL
+*/
+
+/* ==========================================================================
+   KINEVA STUDIOS — GOOGLE ANTIGRAVITY DESIGN SYSTEM
+   Exact replica of https://antigravity.google/ aesthetic, typography, & palette
+   With full-height hero/statement and normal spacious flow for sub-sections
+   ========================================================================== */
+
+:root {
+  --font-sans: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Google Sans Code', 'JetBrains Mono', monospace;
+  
+  --bg-canvas: #F8F9FA;
+  --bg-surface: #FFFFFF;
+  --bg-surface-secondary: #ECECEE;
+  --bg-surface-dark: #000000;
+  
+  --text-primary: #111111;
+  --text-secondary: #45474D;
+  --text-muted: #5F6368;
+  --text-inverse: #FFFFFF;
+  
+  --border-light: rgba(0, 0, 0, 0.08);
+  --border-dark: rgba(255, 255, 255, 0.12);
+  
+  --radius-pill: 9999px;
+  --radius-card: 32px;
+  --radius-card-sm: 24px;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-canvas);
+}
+
+body {
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  line-height: 1.5;
+}
+
+body.logged-in {
+    margin-top: 32px;
+}
+
+body.logged-in nav#siteHeader {
+    top: 32px;
+    z-index: 99999;
+}
+
+/* --------------------------------------------------------------------------
+   Dedicated Full-Screen Fit Sections (Hero & Standalone Showcase)
+   -------------------------------------------------------------------------- */
+.hero-fullscreen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 120px 24px 60px 24px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.statement-normal {
+  padding: 100px 24px 60px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.callout-fullscreen {
+  min-height: 75vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 24px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* --------------------------------------------------------------------------
+   Antigravity Cosmic Particle Dots Background
+   -------------------------------------------------------------------------- */
+.antigravity-dust-bg {
+  background-image: 
+    radial-gradient(1px 1px at 20px 30px, #1a1a24, rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 40px 70px, #22223b, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 50px 160px, #3a3a50, rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 90px 40px, #11111a, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 130px 80px, #2d2d42, rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 160px 120px, #424260, rgba(0,0,0,0));
+  background-repeat: repeat;
+  background-size: 250px 250px;
+  opacity: 0.12;
+}
+
+.cosmic-orbit-dots {
+  background-image: radial-gradient(circle, #6C79FF 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* --------------------------------------------------------------------------
+   Buttons (Google Antigravity Exact Match)
+   -------------------------------------------------------------------------- */
+.btn-ag-primary {
+  background-color: #111111;
+  color: #FFFFFF;
+  border-radius: var(--radius-pill);
+  padding: 12px 26px;
+  font-size: 14px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.btn-ag-primary:hover {
+  background-color: #2D2D2D;
+}
+
+.btn-ag-secondary {
+  background-color: #ECECEE;
+  color: #111111;
+  border-radius: var(--radius-pill);
+  padding: 12px 26px;
+  font-size: 14px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.btn-ag-secondary:hover {
+  background-color: #DADCE0;
+}
+
+.btn-ag-white {
+  background-color: #FFFFFF;
+  color: #111111;
+  border-radius: var(--radius-pill);
+  padding: 12px 26px;
+  font-size: 14px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-ag-white:hover {
+  background-color: #F1F3F4;
+}
+
+.btn-ag-dark-secondary {
+  background-color: #2D2F33;
+  color: #FFFFFF;
+  border-radius: var(--radius-pill);
+  padding: 12px 26px;
+  font-size: 14px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-ag-dark-secondary:hover {
+  background-color: #3C4043;
+}
+
+/* --------------------------------------------------------------------------
+   Cards (Antigravity Surfaces)
+   -------------------------------------------------------------------------- */
+.ag-card-light {
+  background-color: #ECECEE;
+  border-radius: var(--radius-card);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.ag-card-white {
+  background-color: #FFFFFF;
+  border-radius: var(--radius-card);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 24px -6px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ag-card-white:hover {
+  border-color: rgba(0, 0, 0, 0.16);
+  box-shadow: 0 8px 30px -8px rgba(0, 0, 0, 0.08);
+}
+
+.ag-card-dark {
+  background-color: #000000;
+  border-radius: var(--radius-card);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* --------------------------------------------------------------------------
+   Flashing Rainbow Cursor (Antigravity Statement Headline)
+   -------------------------------------------------------------------------- */
+.rainbow-cursor {
+  display: inline-block;
+  width: 3px;
+  height: 1.1em;
+  margin-left: 6px;
+  vertical-align: middle;
+  background: linear-gradient(180deg, #4285F4, #EA4335, #FBBC05, #34A853);
+  animation: blink-fade 1s infinite;
+}
+
+@keyframes blink-fade {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* --------------------------------------------------------------------------
+   Orb Glow for Speed & Performance
+   -------------------------------------------------------------------------- */
+.ag-blue-glow-orb {
+  background: radial-gradient(circle at center, rgba(66, 133, 244, 0.4) 0%, rgba(66, 133, 244, 0.15) 45%, transparent 70%);
+}
+
+/* --------------------------------------------------------------------------
+   FAQ Transitions
+   -------------------------------------------------------------------------- */
+.ag-faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease;
+  opacity: 0;
+}
+
+.ag-faq-item.active .ag-faq-answer {
+  opacity: 1;
+}
+
+.ag-faq-item.active .ag-faq-toggle {
+  transform: rotate(45deg);
+}
+
+/* --------------------------------------------------------------------------
+   Form States (Input, Select, Textarea Exact Match)
+   -------------------------------------------------------------------------- */
+.ag-input,
+input.ag-input,
+textarea.ag-input,
+select.ag-input,
+input[type="text"].ag-input,
+input[type="email"].ag-input,
+input[type="url"].ag-input,
+input[type="text"],
+input[type="email"],
+input[type="url"],
+[type='text'],
+[type='email'],
+[type='url'] {
+  background-color: #FFFFFF !important;
+  border: 1px solid #DADCE0 !important;
+  border-radius: 16px !important;
+  padding: 14px 18px !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  color: #111111 !important;
+  width: 100% !important;
+  font-family: var(--font-sans) !important;
+  box-shadow: none !important;
+  outline: none !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease !important;
+}
+
+.ag-input::placeholder,
+input.ag-input::placeholder,
+textarea.ag-input::placeholder,
+input::placeholder,
+textarea::placeholder {
+  color: #70757A !important;
+  opacity: 0.75 !important;
+}
+
+.ag-input:focus,
+input.ag-input:focus,
+textarea.ag-input:focus,
+select.ag-input:focus,
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+[type='text']:focus,
+[type='email']:focus,
+[type='url']:focus {
+  outline: none !important;
+  border-color: #111111 !important;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08) !important;
+  --tw-ring-color: transparent !important;
+  --tw-ring-shadow: none !important;
+  --tw-ring-offset-shadow: none !important;
+}
+
+select.ag-input {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%235F6368' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E") !important;
+  background-position: right 14px center !important;
+  background-repeat: no-repeat !important;
+  background-size: 18px 18px !important;
+  padding-right: 42px !important;
+}
+
+.form-group.has-error .ag-input,
+.form-group.has-error input.ag-input,
+.form-group.has-error textarea.ag-input,
+.form-group.has-error select.ag-input {
+  border-color: #D93025 !important;
+  background-color: #FDF2F2 !important;
+}
+
+.form-group .error-msg {
+  display: none;
+  color: #D93025;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.form-group.has-error .error-msg {
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   Giant Watermark Display Wordmark (In Container & Centered)
+   -------------------------------------------------------------------------- */
+.ag-watermark-text {
+  font-size: clamp(36px, 14.5vw, 182px);
+  line-height: 0.92;
+  white-space: nowrap !important;
+  letter-spacing: -0.04em;
+  font-weight: 400;
+  color: #111111;
+  display: block;
+  width: 100%;
+  text-align: center !important;
+  user-select: none;
+  overflow: hidden;
+  text-overflow: clip;
+  margin: 0 auto;
+}
+
+
+/* --------------------------------------------------------------------------
+   Scrollbar
+   -------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F8F9FA;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #DADCE0;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9AA0A6;
+}
+
+/* --------------------------------------------------------------------------
+   Modern Minimal Hero Spotlight & Shimmer Animations
+   -------------------------------------------------------------------------- */
+.hero-spotlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    700px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(0, 0, 0, 0.035),
+    rgba(66, 133, 244, 0.02) 40%,
+    transparent 80%
+  );
+  transition: opacity 0.4s ease;
+  z-index: 1;
+}
+
+.hero-ambient-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 750px;
+  height: 500px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.015) 0%, rgba(66, 133, 244, 0.018) 45%, transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+  animation: ambientBreathe 10s ease-in-out infinite alternate;
+  z-index: 1;
+}
+
+@keyframes ambientBreathe {
+  0% {
+    transform: translate(-50%, -50%) scale(0.92);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.08);
+    opacity: 1;
+  }
+}
+
+.shimmer-badge {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-badge::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7), transparent);
+  animation: badgeShimmer 5s ease-in-out infinite;
+}
+
+@keyframes badgeShimmer {
+  0%, 75% {
+    left: -120%;
+  }
+  100% {
+    left: 200%;
+  }
+}
+
+.magnetic-btn {
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.magnetic-btn:hover .btn-arrow {
+  transform: translateX(3px);
+}
+
+/* ------------ Contact form 7 css ------------ */
+.wpcf7 form.sent .wpcf7-response-output {
+    border-color: #46b450;
+    border-radius: 20px;
+    padding: 10px 10px;
+    border: 3px solid #46b450;
+    border-width: 3px 1px 3px 1px;
+}
+/* ------------ Contact form 7 css ------------ */
