@@ -104,7 +104,7 @@
     <!-- Center Nav Links -->
     <div class="hidden md:flex items-center gap-8 text-[14px] font-medium text-[#45474D]">
       <a class="text-[#111111] hover:text-black transition-colors" href="#hero">Home</a>
-      <a class="hover:text-black transition-colors" href="#architecture">Architecture 1</a>
+      <a class="hover:text-black transition-colors" href="#architecture">Architecture</a>
       <a class="hover:text-black transition-colors" href="#services">Services</a>
       <a class="hover:text-black transition-colors" href="#process">Process</a>
       <a class="hover:text-black transition-colors" href="#pricing">Pricing</a>
